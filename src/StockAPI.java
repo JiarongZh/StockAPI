@@ -16,7 +16,7 @@ public class StockAPI extends JFrame{
     private JTextField Ticket;
 
 
-    public static void getStockInfo(String ticker){
+    public static Stock getStockInfo(String ticker){
         ticker = ticker.toUpperCase();
         String url = BASE_URL + ticker + "&api_token=" + API;
         String urlResponse = "";
@@ -37,8 +37,8 @@ public class StockAPI extends JFrame{
         double low = dataObj.getDouble("day_low");
         double price = dataObj.getDouble("price");
         double change = dataObj.getDouble("day_change");
-        System.out.println(name + high + low + price + change);
-
+        Stock s = new Stock(name,high,low,price,change);
+        return s;
     }
 
 }
