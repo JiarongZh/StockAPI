@@ -3,8 +3,7 @@ import org.json.JSONException;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.ArrayList;
 
 
 public class StockGUI extends JFrame implements ActionListener{
@@ -23,8 +22,10 @@ public class StockGUI extends JFrame implements ActionListener{
 
     private Stock stock;
 
+    private StockCollection s;
     public StockGUI(){
         createUIComponents();
+        s = new StockCollection();
     }
 
     private void createUIComponents(){
@@ -42,11 +43,16 @@ public class StockGUI extends JFrame implements ActionListener{
     private void loadStock(String name){
         try {
             stock = StockAPI.getStockInfo(name);
-            nameText.setText(stock.getTicker());
+            Ticket.setText(stock.getTicker());
+            nameText.setText(stock.getName());
             priceText.setText("$" + stock.getPrice());
             highText.setText("$" + stock.getHigh());
             lowText.setText("$" + stock.getLow());
             changeText.setText(stock.getChange() + "%");
+            error.setText("");
+            if(!(s.getStockList().contains(name.toUpperCase()))){
+                s.addStock(name);
+            }
         }catch (JSONException e){
             setClear();
             error.setText("Stock not found or does not exist in this database");
@@ -54,6 +60,7 @@ public class StockGUI extends JFrame implements ActionListener{
     }
 
     private void setClear(){
+        Ticket.setText("");
         nameText.setText("");
         priceText.setText("");
         highText.setText("");
@@ -64,20 +71,9 @@ public class StockGUI extends JFrame implements ActionListener{
 
     private void gamble(){
         setClear();
-        boolean bool = true;
-        while(bool){
-            String gambol = "";
-            for(int i = 0; i<4; i++) {
-                Random r = new Random();
-                char c = (char) (r.nextInt(26) + 'a');
-                gambol += c;
-            }
-            System.out.println(gambol);
-            loadStock(gambol.toUpperCase());
-            if(error.getText().length()==0){
-                bool = false;
-            }
-        }
+        int num = (int)(Math.random()*StockCollection.getStockList().size());
+        loadStock(StockCollection.getStockList().get(num));
+
     }
 
 @Override

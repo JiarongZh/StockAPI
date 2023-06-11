@@ -11,9 +11,10 @@ import java.util.Locale;
 public class StockAPI extends JFrame{
 
     private static String BASE_URL = "https://api.stockdata.org/v1/data/quote?symbols=";
-    private static String API = "MafSn36nzGWVW348Ool0wf4s0KlrLe1WfrJz55XO";
+    private static String API = "zLzEZuLIAoRA85m1jZnje01csJXgWS4c9gl1tLw0";
     private JButton submitButton;
     private JTextField Ticket;
+    private static StockCollection list;
 
 
     public static Stock getStockInfo(String ticker){
@@ -32,12 +33,13 @@ public class StockAPI extends JFrame{
         JSONObject jsonObj = new JSONObject(urlResponse);
         JSONArray arr = jsonObj.getJSONArray("data");
         JSONObject dataObj = arr.getJSONObject(0);
+        String t = dataObj.getString("ticker");
         String name = dataObj.getString("name");
         double high = dataObj.getDouble("day_high");
         double low = dataObj.getDouble("day_low");
         double price = dataObj.getDouble("price");
         double change = dataObj.getDouble("day_change");
-        Stock s = new Stock(name,high,low,price,change);
+        Stock s = new Stock(t,name,high,low,price,change);
         return s;
     }
 
